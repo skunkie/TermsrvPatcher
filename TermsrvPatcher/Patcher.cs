@@ -413,9 +413,9 @@ namespace TermsrvPatcher
             return status;
         }
 
-        public void StopTermService()
+        public void StopService(string name)
         {
-            ServiceController sc = new ServiceController("TermService");
+            ServiceController sc = new ServiceController(name);
             // Do not use sc.CanStop, it is also true when already stopping!
             if (sc.Status.Equals(ServiceControllerStatus.Running))
             {
@@ -467,15 +467,35 @@ namespace TermsrvPatcher
             }
         }
 
-        public void StartTermService()
+        public void StopTermService()
         {
-            ServiceController sc = new ServiceController("TermService");
+            StopService("TermService");
+        }
+
+        public void StopUmRdpService()
+        {
+            StopService("UmRdpService");
+        }
+
+        public void StartService(string name)
+        {
+            ServiceController sc = new ServiceController(name);
 
             if (sc.Status == ServiceControllerStatus.Stopped)
             {
                 sc.Start();
             }
             sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, ServiceTimeout));
+        }
+
+        public void StartTermService()
+        {
+            StartService("TermService");
+        }
+
+        public void StartUmRdpService()
+        {
+            StartService("UmRdpService");
         }
 
         public void Patch(List<object> patch)
