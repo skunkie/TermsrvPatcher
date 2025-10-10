@@ -1,5 +1,5 @@
 # Format: Architecture, hex find string, hex replace string
-# Wildcard chracter for find string: *
+# Wildcard character for find string: *
 # Separator character for multiple find and replace strings: |
 
 # Example 1: Single find and replace patterns
