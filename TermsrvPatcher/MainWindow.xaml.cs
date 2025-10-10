@@ -408,8 +408,9 @@ namespace TermsrvPatcher
         {
             try
             {
-                worker.ReportProgress(20, new object[] { $"Stopping TermService (might take up to " +
+                worker.ReportProgress(20, new object[] { $"Stopping UmRdpService and TermService (might take up to " +
                     $"{3 * Patcher.ServiceTimeout} seconds)...", false });
+                patcher.StopUmRdpService();
                 patcher.StopTermService();
                 worker.ReportProgress(40, new object[] { " Done", true });
                 if (Convert.ToBoolean(((object[])e.Argument)[0]))
@@ -440,6 +441,15 @@ namespace TermsrvPatcher
                 {
                     worker.ReportProgress(100, new object[] { " Failed", true });
                     worker.ReportProgress(100, new object[] { "Starting TermService timed out", false });
+                }
+                try
+                {
+                    patcher.StartUmRdpService();
+                }
+                catch (System.ServiceProcess.TimeoutException)
+                {
+                    worker.ReportProgress(100, new object[] { " Failed", true });
+                    worker.ReportProgress(100, new object[] { "Starting UmRdpService timed out", false });
                 }
                 worker.ReportProgress(100, new object[] { " Done", true });
             }
